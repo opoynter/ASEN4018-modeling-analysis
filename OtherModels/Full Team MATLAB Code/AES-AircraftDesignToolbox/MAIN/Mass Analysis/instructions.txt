@@ -1,0 +1,112 @@
+
+This sub-section of the larger aircraft design toolbox is intended to enable
+ rapid mass property analysis for existing aircraft modeled in OpenVSP.
+
+It consists of TWO parts:
+1. A component mass model
+2. A cg analysis tool
+
+It does not curently interact with the rest of the code, although you will 
+need a few weight values from the mission analysis code to get started, and 
+your aircraft design.
+
+Section 1: Component Mass Model
+
+The component mass model is based off of the one in Raymer Ch15.3.1-15.3.3
+It's a statistical weight model based off of various configuration parameters
+such as geometry, mass, load factor, aircraft type etc. The model in the code
+is simplified from the Raymer models so it requires less inputs, but only computes
+weights of major components (wing,fuselage, landing gear etc.). It simplifies the rest
+into a category called "all other subsystems". 
+
+a. To use this tool you first need to make a weight sheet. Templates currently
+exist in component_mass/weightSheet_XXXX.xlsx. This is actually the same analysis
+tool that we used for this entire process in past versions of the class. The first
+page is all you need for this version of the code, but you can use the second 
+page for verification/debugging (this may be removed in future versions).
+Fill out the inputs on the first page, and save the file.
+Note that you have three categories to select from in this file:
+"fighter", "Bomber/Large Jet Transport", "General Aviation/Prop Transport".
+If your aircraft doesn't fit in these categories well, or is a very 
+unconventional design (i.e flying wing) this code probably will not be useful.
+
+b. After making this input spreadsheet, you can run:
+ myWeights = componentWeightModel(spreadsheet_filename);
+myWeights is a structure that contains fields named for the components, and 
+numeric values for the weights (in lbs!!). It also prints the comp. weights,
+the new empty weight estimate, and the new W0 based on the new computed empty
+weight, and the same fuel and payload weights.
+
+c. (IN VSP) NOW IT IS IMPERATIVE TO MAKE A COPY OF YOUR VSP3 FILE FOR YOUR AIRCRAFT
+The next portions of the code read from and create a new vsp3 file. If reading
+from the file somehow corrupts your vsp3 file, it would be nice to have a copy!!!
+
+D. (IN VSP)Set interior components priority above the volume that incloses them.
+ALSO ensure you have no parts named identically! Other than that, naming convention
+in VSP should not matter.
+
+E. (IN VSP)Run Mass Prop Tool w/ sufficient number of slices. Densities
+for individual components don't matter, as these will be updated.
+
+F. Now you can call updateVSPWeights(mass_props_filename, vsp3_filename, myWeights);
+this function will have you fill out a matrix that assigns parts from the comp
+mass model to your parts named in you VSP file:
+each column is a comp mass part.
+each row is a vsp part.
+Of course, the sum of every column should add to one. The code will mention 
+in the text command window if you leave weights unassigned!
+
+G. Hit the button to create a new file. It will be named "<oldfilename>_updated.vsp3"
+
+H. Open the new file in VSP and run mass prop. The weight should match that
+computed by the component mass model. You need to run it with an adequate
+number of slices (the same # used when you first created the mass props file).
+
+A few things to note:
+the code assigns a uniform density to parts. It cannot be used with the 
+'thin shell' mass prop tool in openvsp, as the only tool that outputs area
+(compgeom) doesn't match whatever massprops uses for internal calculations
+
+Section 2.
+With your new VSP file, you can now use the CG analysis GUI. It enables you
+to dynamically select sets of components, adjust what % of their weight
+you want to use for calculations, and see how CG changes with these different
+sets. For example, you could select all relevant components, and then make
+sets with full fuel, empty fuel, no payload +full fuel etc etc.It saves the
+sets in a file of your choosing (see the main_CG_analysis.m file for info).
+Be sure to select the correct path to the relevant MassProps file! If there
+are multiple files with the same name in matlab but different paths, and both
+are on the Matlab path, it will be unclear which one matlab chooses! Once you 
+create your sets, the tool plots how the CG travels between sets!
+
+a. Now that you have completed section 2 and have a new VSP file with updated
+densities, rerun the Mass Prop tool. Again, make sure your mass priority is set
+correctly, and double check that the mass outputs make sense.
+
+b. Next, run the stability analysis in VSP through VSPaero. ADD RECOMMENDATIONS
+FOR STABILITY PARAMETERS. Open the .stab file, and find the aircraft neutral point
+(X_np).
+
+c. The last inputs are c_MAC and static margin bounds. The mean aerodynamic chord (c_MAC)
+is defined as part of the VSP wing geometry. The static margin bounds are defined here
+by the user. CHECK RAYMER FOR STATIC MARGIN RECOMMENDATIONS.
+
+d. Now, run the MATLAB CG analysis script. A component weight buildup GUI will open.
+This allows the user to define different sets of components, of which the CG and static
+margin will be calculated. Its generally important to consider various weight cases.
+Some combinations of empty/50%/full fuel, empty/full cargo, zero/full passengers, stowed/extended
+landing gear are a good place to start, but the specifics will depend on the aircraft.
+Sets defined in GUI are saved to a file, defined as setsFile in the script. Be sure to change
+the name of this file if you change planes and want to save previously defined sets.
+Note that sets will only be loaded if component names are exactly the same as the saved
+case. Changing any component names or adding or removing components will cause you to
+have to redefine your sets.
+
+e. Once you confirm your defined sets, the CG and static margin plot will be
+generated. CG is shown on the x axis, with blue points for aircraft weight and
+red for static margin. To meet requirements, points must be within the required
+CG limits (the dotted blue lines). The red points must be within the sts
+
+
+
+

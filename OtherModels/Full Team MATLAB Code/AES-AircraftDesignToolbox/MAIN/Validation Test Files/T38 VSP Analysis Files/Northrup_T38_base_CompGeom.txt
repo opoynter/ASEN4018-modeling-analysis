@@ -1,0 +1,33 @@
+...Comp Geom...
+7 Num Comps
+11 Total Num Meshes
+20872 Total Num Tris
+
+Theo_Area   Wet_Area   Theo_Vol    Wet_Vol  Name
+  372.554    191.818    271.372    204.633  FuselageGeom   
+  254.191    130.286    154.903    116.281  Canopy_Dorsal  
+  340.717    239.211     34.889     34.889  wing           
+   60.733     46.035      4.152      4.152  tail           
+   60.733     46.035      4.152      4.152  tail           
+  269.229     62.575     49.395     16.814  inlet_afterbody
+  269.229     62.693     49.395     16.846  inlet_afterbody
+   86.804     72.936     10.758     10.758  fin            
+  173.019     62.514     86.697     45.877  inlet_afterbody_CDo
+  173.019     65.047     86.697     47.736  inlet_afterbody_CDo
+-------------------------------------------------
+ 2060.228    979.149    752.410    502.138  Totals         
+
+Tag_Theo_Area   Tag_Wet_Area    Tag_Name
+      372.554        191.818    FuselageGeom_S_Surf0
+      254.191        130.286    Canopy_Dorsal_S_Surf0
+      170.359        119.605    wing_S_Surf0   
+      170.359        119.605    wing_S_Surf1   
+       60.733         46.035    tail_S_Surf0   
+       60.733         46.035    tail_S_Surf1   
+      269.229         62.575    inlet_afterbody_S_Surf0
+      269.229         62.693    inlet_afterbody_S_Surf1
+       86.804         72.936    fin_S_Surf0    
+      173.019         62.514    inlet_afterbody_CDo_S_Surf0
+      173.019         65.047    inlet_afterbody_CDo_S_Surf1
+WARNING: 1 open meshes merged
+     Merged: wing

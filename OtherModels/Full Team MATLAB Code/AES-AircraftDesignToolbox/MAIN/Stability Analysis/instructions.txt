@@ -1,0 +1,14 @@
+These are instructions for this stability analysis code w/ VSPAERO
+
+1. Setup VSPAero for your aircraft
+2. Set the flow conditions at one trim point you're interested in.
+3. Turn off X-z sym.
+4. In the advanced tab select "steady" stability type
+5. Set the cg reference location.
+6. Run, Open .Stab file
+7. Populate one of the excel sheets based on the templates
+8. Calculate total aircraft CD at trim (use CL from vspaero, k1 from other
+part of this code,CD0 from parasite drag tool. CD=Cd0+k1*CL^2
+9.Calculate CFX0=CD*cos(alpha)+CL*sin(alpha) and put it into the spreadsheet
+10. Run either Main.m or you can try the app (SimpleStab.m) as well.
+11. In both you can select either SI or imperial unit systems
