@@ -1,0 +1,6 @@
+#mac junk
+.DS_Store
+#matlab junk
+.asv
+#output excel sheets
+MAIN/Output Excel Sheets/
