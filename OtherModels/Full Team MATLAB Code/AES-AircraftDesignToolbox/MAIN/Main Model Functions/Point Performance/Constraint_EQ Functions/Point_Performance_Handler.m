@@ -1,4 +1,4 @@
-function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constants,W_S_range,Propulsion_Input,Config_Row,DragPolar_Model,WaveDrag_Data,msgs)
+function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constants,W_S_range,Propulsion_Input,Config_Row,DragPolar_Model,WaveDrag_Data,flap_design,msgs)
     %Author: Jonathan Morris
     %ASEN 4138
     %Point_Performance_Handler takes in a Req_Input structure (defined in
@@ -35,10 +35,10 @@ function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constan
 
                 case "Takeoff Distance"
                     
-                    [~,P_Wreq,X_Req_Data{i}]=Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data);
+                    [~,P_Wreq,X_Req_Data{i}]=Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data,flap_design);
                     X_Y_req(i,:)=P_Wreq;
                 case "Stall Velocity"
-                    [W_S_req,X_Req_Data{i}]=Stall_Constraint_EQ(Req_Inputs,Constants);
+                    [W_S_req,X_Req_Data{i}]=Stall_Constraint_EQ(Req_Inputs,Constants,flap_design);
                     X_Y_req(i,:)=W_S_req*ones(1,length(W_S_range));
                 case "Absolute Ceiling"
                     [~,P_Wreq,X_Req_Data{i}] = Master_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data);
@@ -57,7 +57,7 @@ function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constan
                     X_Y_req(i,:)=P_Wreq;
 
                 case "Landing Distance"
-                    [W_S_req,X_Req_Data{i}]=Landing_Constraint_EQ(Req_Inputs,Constants,DragPolar_Model,WaveDrag_Data);
+                    [W_S_req,X_Req_Data{i}]=Landing_Constraint_EQ(Req_Inputs,Constants,DragPolar_Model,WaveDrag_Data,flap_design);
                     X_Y_req(i,:)=W_S_req*ones(1,length(W_S_range));
                 case "VTOL"
                     [P_Wreq,X_Req_Data{i}]=Vtol_Constraint_EQ(Req_Inputs,Constants,Propulsion_Input,10);
@@ -81,11 +81,11 @@ function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constan
             switch reqtype(i)
 
                 case "Takeoff Distance"
-                    [T_Wreq,~,X_Req_Data{i}]=Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data);
+                    [T_Wreq,~,X_Req_Data{i}]=Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data,flap_design);
                     X_Y_req(i,:)=T_Wreq;
 
                 case "Stall Velocity"
-                    [W_S_req,X_Req_Data{i}]=Stall_Constraint_EQ(Req_Inputs,Constants);
+                    [W_S_req,X_Req_Data{i}]=Stall_Constraint_EQ(Req_Inputs,Constants,flap_design);
                     X_Y_req(i,:)=W_S_req*ones(1,length(W_S_range));
 
                 case "Absolute Ceiling"
@@ -104,7 +104,7 @@ function [X_Y_req,X_Req_Data,msgs] = Point_Performance_Handler(Req_Input,Constan
                     X_Y_req(i,:)=T_Wreq;
 
                 case "Landing Distance"
-                    [W_S_req,X_Req_Data{i}]=Landing_Constraint_EQ(Req_Inputs,Constants,DragPolar_Model,WaveDrag_Data);
+                    [W_S_req,X_Req_Data{i}]=Landing_Constraint_EQ(Req_Inputs,Constants,DragPolar_Model,WaveDrag_Data,flap_design);
                     X_Y_req(i,:)=W_S_req*ones(1,length(W_S_range));
 
                 otherwise
