@@ -1,4 +1,4 @@
-function [W_S_stall_req,Stall_REQ_DATA,msgs] = Stall_Constraint_EQ(Req_Inputs,Constants,msgs)
+function [W_S_stall_req,Stall_REQ_DATA,msgs] = Stall_Constraint_EQ(Req_Inputs,Constants,flap_design,msgs)
 
 %Evaluates W/S requirements based on
 %point performance inputs for desired stall velocity assuming SLUF at full
@@ -23,6 +23,9 @@ V_stall_req = Req_Inputs{1,3}*6076/3600; %Converts desired stall velocity from k
 %Calculate atmospheric properties based on input altitude (h)
 [rho,a,T,P,nu,z] = atmos(h,'units','US');
 
+%Flap lift added
+[delta_CLmax_to, delta_CD0_to] = flap_effects(flap_design);
+CL_max_stall = CL_max_stall + delta_CLmax_to;
 
 %Determine required W/S for Stall Req assuming SLUF at full takeoff weight
 

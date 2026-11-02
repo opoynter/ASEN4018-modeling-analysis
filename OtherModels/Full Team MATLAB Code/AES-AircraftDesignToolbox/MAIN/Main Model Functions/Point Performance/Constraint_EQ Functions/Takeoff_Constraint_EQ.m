@@ -1,4 +1,4 @@
-function [T_W_TOreq,P_W_TOreq,TO_REQ_DATA,msgs] = Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data,msgs)
+function [T_W_TOreq,P_W_TOreq,TO_REQ_DATA,msgs] = Takeoff_Constraint_EQ(Req_Inputs,Constants,W_S_range,Propulsion_Input,DragPolar_Model,WaveDrag_Data,flap_design,msgs)
 
 %Master Constraint Equation function evaluates T/W or P/W requirements based on
 %point performance inputs for a wide range of performance requirements.
@@ -29,6 +29,10 @@ S_TO = Req_Inputs{1,7};
 %Calculate atmospheric properties based on input altitude (h)
 [rho,a,T,P,nu,z] = atmos(h,'units','US');
 
+%Flap lift added
+[delta_CLmax_to, delta_CD0_to] = flap_effects(flap_design);
+CL_max_TO = CL_max_TO + delta_CLmax_to;
+
  %Takeoff velocity estimation
  V_stall = sqrt(2*Wo*Beta/(rho*CL_max_TO*Sref_initial)); %Estimation of stall velocity (ft/s)
  V_TO = 1.2*V_stall; %Estimated takeoff velocity (ft/s)
@@ -52,6 +56,9 @@ end
 
 %Calculate drag polar using DragPolar_Function and input mach
 [CD,CDo_msn,k1_msn,k2_msn] = DragPolar_Function(M,CL_max_TO,Config_Row,DragPolar_Model,WaveDrag_Data);
+
+%Flap drag added
+CDo_msn = CDo_msn + delta_CD0_to;
 
 %Determine required T/W and P/W for Req using Takeoff Constraint Equation
 %(Based on constant force acceleration takeoff groundroll model)

@@ -1,4 +1,4 @@
-function msgs = point_performance(Design_Input,Config,W0_calc,Propulsion_Input,DragPolar_Model,WaveDrag_Data,outputTable,Req_Input,W_S_range,msgs)
+function msgs = point_performance(Design_Input,Config,W0_calc,Propulsion_Input,DragPolar_Model,WaveDrag_Data,outputTable,Req_Input,W_S_range,flap_design,msgs)
     %% Aircraft Design Point Performance / Constraint Sizing Analysis
     % ASEN 4138
     % Author: John Mah, Maggie Wussow, Jonathan Morris
@@ -64,7 +64,7 @@ function msgs = point_performance(Design_Input,Config,W0_calc,Propulsion_Input,D
 
 
 
-    [X_Y_req,X_Req_Data,msgs] =Point_Performance_Handler(Req_Input,Constants,W_S_range,Propulsion_Input,Config_Row,DragPolar_Model,WaveDrag_Data,msgs);
+    [X_Y_req,X_Req_Data,msgs] =Point_Performance_Handler(Req_Input,Constants,W_S_range,Propulsion_Input,Config_Row,DragPolar_Model,WaveDrag_Data,flap_design,msgs);
     PropType=Propulsion_Input.PropType;
     PropType=PropType(Config_Row);
 
