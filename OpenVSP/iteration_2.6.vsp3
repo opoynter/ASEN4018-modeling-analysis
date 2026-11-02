@@ -472,7 +472,7 @@
           <Iyz Value="0.000000000000000000e+00" ID="KKUEUYZCBBV"/>
           <Izz Value="0.000000000000000000e+00" ID="TRHZCGCHJHV"/>
           <Mass_Area Value="1.000000000000000000e+00" ID="ZQQPUPMRUET"/>
-          <Mass_Prior Value="1.000000000000000000e+00" ID="GYKUVSQAVOH"/>
+          <Mass_Prior Value="0.000000000000000000e+00" ID="GYKUVSQAVOH"/>
           <PointMass Value="0.000000000000000000e+00" ID="NPFUDHLBQGZ"/>
           <Shell_Flag Value="0.000000000000000000e+00" ID="AXVTJPCOQRV"/>
         </Mass_Props>
