@@ -1,4 +1,4 @@
-function [delta_CLmax, delta_CD0_flap] = flap_effects(flap_design)
+function [delta_CLmax] = flap_effects(flap_design)
 % FLAP_EFFECTS_PARAM Computes 3D wing CLmax increment and CD0 parasitic drag increment 
 % from trailing-edge flaps given explicit geometric and deflection parameters.
 %
@@ -16,39 +16,31 @@ function [delta_CLmax, delta_CD0_flap] = flap_effects(flap_design)
 flap_type = flap_design.type;
 cf_c = flap_design.cr;
 bf_b = flap_design.br;
-delta_f_deg = flap_design.Dangle;
+% delta_f_deg = flap_design.Dangle;
 Lambda_hl_deg = flap_design.HLangle;
 
 % Convert input angles to radians
-delta_f_rad   = deg2rad(delta_f_deg);
+% delta_f_rad   = deg2rad(delta_f_deg);
 Lambda_hl_rad = deg2rad(Lambda_hl_deg);
 
 
 % Select empirical lift and drag scaling factors based on flap architecture
 switch lower(flap_type)
     case 'plain'
-        k1 = 0.90;
-        cd_factor = 0.014;
+        delta_Cl_max = 0.9;
     case 'split'
-        k1 = 1.05;
-        cd_factor = 0.018;
+        delta_Cl_max = 0.9;
     case 'slotted'
-        k1 = 1.35;
-        cd_factor = 0.012;
+        delta_Cl_max = 1.3;
     case 'fowler'
-        k1 = 1.60 * (1 + 0.25 * cf_c); % Accounts for chord extension
-        cd_factor = 0.015;
+        delta_Cl_max = 1.3 * cf_c; % Accounts for chord extension
     otherwise
         error('Unknown flap type. Options are: plain, split, slotted, fowler');
 end
 
-% 2D section maximum lift increment (delta_cl_max)
-delta_cl_max = k1 * sqrt(cf_c) * sin(delta_f_rad);
 
 % 3D wing maximum lift increment (delta_CLmax)
 % Corrected for flapped span fraction and hinge-line sweep
-delta_CLmax = delta_cl_max * bf_b * cos(Lambda_hl_rad);
+delta_CLmax = delta_Cl_max * bf_b * cos(Lambda_hl_rad);
 
-% 3D wing parasite drag coefficient increment (delta_CD0_flap)
-delta_CD0_flap = cd_factor * cf_c * bf_b * (sin(delta_f_rad)^2);
 end

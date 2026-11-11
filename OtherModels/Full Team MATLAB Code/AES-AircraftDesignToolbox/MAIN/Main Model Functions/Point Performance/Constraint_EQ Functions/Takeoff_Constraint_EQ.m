@@ -30,8 +30,9 @@ S_TO = Req_Inputs{1,7};
 [rho,a,T,P,nu,z] = atmos(h,'units','US');
 
 %Flap lift added
-[delta_CLmax_to, delta_CD0_to] = flap_effects(flap_design);
-CL_max_TO = CL_max_TO + delta_CLmax_to;
+delta_CLmax_to = flap_effects(flap_design);
+effectTO = 0.7; % Raymer effectiveness on TO 0.6-0.8
+CL_max_TO = CL_max_TO + delta_CLmax_to * effectTO;
 
  %Takeoff velocity estimation
  V_stall = sqrt(2*Wo*Beta/(rho*CL_max_TO*Sref_initial)); %Estimation of stall velocity (ft/s)
@@ -56,9 +57,6 @@ end
 
 %Calculate drag polar using DragPolar_Function and input mach
 [CD,CDo_msn,k1_msn,k2_msn] = DragPolar_Function(M,CL_max_TO,Config_Row,DragPolar_Model,WaveDrag_Data);
-
-%Flap drag added
-CDo_msn = CDo_msn + delta_CD0_to;
 
 %Determine required T/W and P/W for Req using Takeoff Constraint Equation
 %(Based on constant force acceleration takeoff groundroll model)

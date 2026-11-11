@@ -27,7 +27,7 @@ S_Land = Req_Inputs{1,6};
 [rho,a,T,P,nu,z] = atmos(h,'units','US');
 
 %Flap lift added
-[delta_CLmax_to, delta_CD0_to] = flap_effects(flap_design);
+delta_CLmax_to = flap_effects(flap_design);
 CL_max_land = CL_max_land + delta_CLmax_to;
 
 %Landing approach velocity estimation
@@ -38,9 +38,6 @@ M = V_Land/a; %Conversion to Mach for landing velocity
       
 %Calculate drag polar using DragPolar_Function and input mach
 [CD,CDo_msn,k1_msn,k2_msn] = DragPolar_Function(M,CL_max_land,Config_Row,DragPolar_Model,WaveDrag_Data);
-
-%Flap drag added
-CDo_msn = CDo_msn + delta_CD0_to;
 
 %Determine required W/S for Req using Landing Constraint Equation
 %(Based on constant force decceleration landing groundroll model)
